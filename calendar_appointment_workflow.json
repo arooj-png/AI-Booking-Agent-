@@ -1,0 +1,224 @@
+{
+    "name": "Calendar Appointment Workflow",
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "calendar_slots",
+            "name": "calendar_slots",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                200,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "getAll"
+            },
+            "id": "get_many_events",
+            "name": "Get many events",
+            "type": "n8n-nodes-base.googleCalendar",
+            "typeVersion": 1,
+            "position": [
+                400,
+                100
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "aggregate",
+            "name": "Aggregate",
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                600,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "return items;"
+            },
+            "id": "code",
+            "name": "Code",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                800,
+                100
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "respond_open_slots",
+            "name": "Respond to calendar open slots",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                100
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "calendar_availability",
+            "name": "calendar_availability",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                200,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "availability"
+            },
+            "id": "get_availability",
+            "name": "Get availability in a calendar",
+            "type": "n8n-nodes-base.googleCalendar",
+            "typeVersion": 1,
+            "position": [
+                400,
+                300
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "respond_availability",
+            "name": "Respond to is date available",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                600,
+                300
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "calendar_set_appointment",
+            "name": "calendar_set_appointment",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                200,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "create"
+            },
+            "id": "create_event",
+            "name": "Create an event",
+            "type": "n8n-nodes-base.googleCalendar",
+            "typeVersion": 1,
+            "position": [
+                400,
+                500
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "respond_created_appointment",
+            "name": "Respond to is created appointment",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                600,
+                500
+            ]
+        }
+    ],
+    "connections": {
+        "calendar_slots": {
+            "main": [
+                [
+                    {
+                        "node": "Get many events",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many events": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to calendar open slots",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "calendar_availability": {
+            "main": [
+                [
+                    {
+                        "node": "Get availability in a calendar",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get availability in a calendar": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to is date available",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "calendar_set_appointment": {
+            "main": [
+                [
+                    {
+                        "node": "Create an event",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create an event": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to is created appointment",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
